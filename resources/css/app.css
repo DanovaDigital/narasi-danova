@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    /* Smooth scroll behavior */
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    /* Better font rendering */
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+@layer components {
+    /* Cursor pointer for all interactive elements */
+    a, button, [role="button"], .cursor-pointer {
+        cursor: pointer;
+    }
+    
+    /* Smooth transitions for all interactive elements */
+    a, button, [role="button"] {
+        transition: all 200ms ease-in;
+    }
+}
+
+@layer utilities {
+    /* Custom shadow utilities */
+    .shadow-soft {
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+    }
+    
+    .shadow-soft-lg {
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    }
+}
