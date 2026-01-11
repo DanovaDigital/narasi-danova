@@ -14,8 +14,8 @@
                     @method('PUT')
 
                     @foreach ($settings as $group => $groupSettings)
-                    <section class="border rounded-lg p-4">
-                        <h3 class="text-lg font-semibold capitalize">{{ str_replace('_', ' ', $group) }}</h3>
+                    <section class="border border-gray-200 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 capitalize">{{ str_replace('_', ' ', $group) }}</h3>
 
                         <div class="mt-4 space-y-4">
                             @foreach ($groupSettings as $setting)
@@ -23,11 +23,11 @@
                                 <label class="block text-sm font-medium text-gray-700" for="setting_{{ $setting->key }}">{{ str_replace('_', ' ', $setting->key) }}</label>
 
                                 @if ($setting->type === 'textarea')
-                                <textarea id="setting_{{ $setting->key }}" name="settings[{{ $setting->key }}]" rows="3" class="mt-1 border rounded-md px-3 py-2 text-sm w-full">{{ old('settings.' . $setting->key, $setting->value) }}</textarea>
+                                <textarea id="setting_{{ $setting->key }}" name="settings[{{ $setting->key }}]" rows="3" class="mt-1 block w-full rounded-md border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:ring-brand-500">{{ old('settings.' . $setting->key, $setting->value) }}</textarea>
                                 @elseif ($setting->type === 'boolean')
                                 <div class="mt-2">
                                     <label class="inline-flex items-center gap-2 text-sm">
-                                        <input type="checkbox" name="settings[{{ $setting->key }}]" value="1" class="rounded" @checked(old('settings.' . $setting->key, (string) $setting->value) === '1') />
+                                        <input type="checkbox" name="settings[{{ $setting->key }}]" value="1" class="rounded border-gray-300 text-brand-600 focus:ring-brand-500" @checked(old('settings.' . $setting->key, (string) $setting->value) === '1') />
                                         <span>Enabled</span>
                                     </label>
                                 </div>
@@ -37,11 +37,11 @@
                                 @if ($setting->value)
                                 <div class="mt-2">
                                     <p class="text-xs text-gray-600">Current:</p>
-                                    <img src="{{ Storage::disk('public')->url($setting->value) }}" alt="Site logo" class="mt-1 h-14 w-auto rounded border" />
+                                    <img src="{{ Storage::disk('public')->url($setting->value) }}" alt="Site logo" class="mt-1 h-14 w-auto rounded border border-gray-200" />
                                 </div>
                                 @endif
                                 @else
-                                <input id="setting_{{ $setting->key }}" name="settings[{{ $setting->key }}]" value="{{ old('settings.' . $setting->key, $setting->value) }}" class="mt-1 border rounded-md px-3 py-2 text-sm w-full" />
+                                <input id="setting_{{ $setting->key }}" name="settings[{{ $setting->key }}]" value="{{ old('settings.' . $setting->key, $setting->value) }}" class="mt-1 block w-full rounded-md border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:ring-brand-500" />
                                 @endif
 
                                 @error('settings.' . $setting->key)
