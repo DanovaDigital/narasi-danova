@@ -1,16 +1,16 @@
 <x-app-layout>
     {{-- Author Hero Section --}}
-    <div class="bg-gradient-to-r from-primary-600 to-accent-600 text-white">
-        <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-            <div class="flex flex-col items-center gap-6 md:flex-row">
+    <div class="bg-dark text-white">
+        <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+            <div class="flex flex-col items-center gap-8 md:flex-row">
                 {{-- Avatar --}}
                 <div class="flex-shrink-0">
                     @if($author->avatar_url)
                     <img src="{{ $author->avatar_url }}"
                         alt="{{ $author->name }}"
-                        class="h-32 w-32 rounded-full border-4 border-white shadow-lg">
+                        class="h-36 w-36 rounded-full border-4 border-brand-500 shadow-lg ring-4 ring-brand-500/20">
                     @else
-                    <div class="flex h-32 w-32 items-center justify-center rounded-full border-4 border-white bg-white/20 text-4xl font-bold shadow-lg">
+                    <div class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-brand-500 bg-brand-500/20 font-display text-5xl font-bold shadow-lg ring-4 ring-brand-500/20">
                         {{ strtoupper(substr($author->name, 0, 1)) }}
                     </div>
                     @endif
@@ -18,33 +18,33 @@
 
                 {{-- Author Info --}}
                 <div class="flex-1 text-center md:text-left">
-                    <div class="text-sm font-medium text-primary-100">Penulis</div>
-                    <h1 class="mt-2 text-4xl font-bold">{{ $author->name }}</h1>
+                    <div class="inline-block rounded-full bg-brand-500/10 px-4 py-1.5 text-sm font-medium text-brand-400">Penulis</div>
+                    <h1 class="mt-4 font-display text-4xl font-bold leading-tight md:text-5xl">{{ $author->name }}</h1>
 
                     @if($author->bio)
-                    <p class="mt-3 max-w-2xl text-lg text-primary-50">{{ $author->bio }}</p>
+                    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-gray-300">{{ $author->bio }}</p>
                     @endif
 
                     {{-- Stats --}}
-                    <div class="mt-6 flex flex-wrap justify-center gap-6 md:justify-start">
+                    <div class="mt-8 flex flex-wrap justify-center gap-8 md:justify-start">
                         <div class="text-center">
-                            <div class="text-2xl font-bold">{{ $articles->total() }}</div>
-                            <div class="text-sm text-primary-100">Artikel</div>
+                            <div class="font-display text-3xl font-bold text-brand-400">{{ $articles->total() }}</div>
+                            <div class="mt-1 text-sm text-gray-400">Artikel</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold">{{ number_format($articles->sum('views_count')) }}</div>
-                            <div class="text-sm text-primary-100">Total Views</div>
+                            <div class="font-display text-3xl font-bold text-brand-400">{{ number_format($articles->sum('views_count')) }}</div>
+                            <div class="mt-1 text-sm text-gray-400">Total Views</div>
                         </div>
                     </div>
 
                     {{-- Social Links --}}
                     @if($author->social_links && count($author->social_links) > 0)
-                    <div class="mt-4 flex flex-wrap justify-center gap-3 md:justify-start">
+                    <div class="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
                         @foreach($author->social_links as $platform => $url)
                         <a href="{{ $url }}"
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium backdrop-blur-sm transition hover:bg-white/20">
+                            class="flex items-center gap-2 rounded-xl bg-white/5 px-4 py-2.5 text-sm font-medium ring-1 ring-white/10 backdrop-blur-sm transition-all duration-200 hover:bg-brand-500/20 hover:text-brand-400 hover:ring-brand-500/30">
                             @if($platform === 'twitter')
                             <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
@@ -77,30 +77,34 @@
     </div>
 
     {{-- Articles Section --}}
-    <div class="bg-gray-50 py-8">
+    <div class="bg-paper py-12">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <x-section-header
                 title="Artikel Terbaru"
                 :subtitle="'Semua artikel oleh ' . $author->name"
-                class="mb-6" />
+                class="mb-8" />
 
             @if($articles->count())
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 @foreach($articles as $article)
-                <x-news-card :article="$article" />
+                <x-article-card :article="$article" variant="standard" />
                 @endforeach
             </div>
 
-            <div class="mt-8">
+            <div class="mt-10">
                 {{ $articles->links() }}
             </div>
             @else
-            <div class="rounded-lg bg-white p-12 text-center shadow">
-                <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            <div class="rounded-2xl bg-white p-16 text-center shadow-soft">
+                <svg class="mx-auto h-20 w-20 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
-                <p class="mt-4 text-gray-600">Belum ada artikel dari penulis ini.</p>
-                <a href="{{ route('home') }}" class="mt-4 inline-block rounded-lg bg-primary-600 px-6 py-2 text-sm font-semibold text-white hover:bg-primary-700">
+                <h3 class="mt-6 font-display text-xl font-semibold text-gray-900">Belum Ada Artikel</h3>
+                <p class="mt-2 text-gray-500">Penulis ini belum memiliki artikel yang dipublikasikan.</p>
+                <a href="{{ route('home') }}" class="mt-6 inline-flex items-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-brand-700 hover:shadow-md">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
                     Kembali ke Beranda
                 </a>
             </div>
