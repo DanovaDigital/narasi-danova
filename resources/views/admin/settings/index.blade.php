@@ -37,7 +37,7 @@
                                 @if ($setting->value)
                                 <div class="mt-2">
                                     <p class="text-xs text-gray-600">Current:</p>
-                                    <img src="{{ Storage::disk('public')->url($setting->value) }}" alt="Site logo" class="mt-1 h-14 w-auto rounded border border-gray-200" />
+                                    <img src="{{ asset('storage/' . $setting->value) }}" alt="Site logo" class="mt-1 h-14 w-auto rounded border border-gray-200" />
                                 </div>
                                 @endif
                                 @else
