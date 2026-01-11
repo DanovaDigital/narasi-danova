@@ -6,7 +6,6 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SubscriberController;
-use App\Http\Controllers\NewsSubmissionController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
@@ -27,9 +26,6 @@ Route::get('/search', SearchController::class)->name('search');
 Route::post('/subscribe', [SubscriberController::class, 'store'])->middleware('throttle:5,1')->name('subscribe');
 Route::get('/subscribe/verify/{token}', [SubscriberController::class, 'verify'])->name('subscribe.verify');
 Route::get('/unsubscribe/{token}', [SubscriberController::class, 'unsubscribe'])->name('unsubscribe');
-
-Route::get('/news-submission', [NewsSubmissionController::class, 'create'])->name('news.submission.form');
-Route::post('/news-submission', [NewsSubmissionController::class, 'store'])->middleware('throttle:5,1')->name('news.submission');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest:admin')->group(function () {
