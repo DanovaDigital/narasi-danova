@@ -13,6 +13,14 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
+
+    ::selection {
+        @apply bg-brand-200/80 text-dark;
+    }
+
+    ::-moz-selection {
+        @apply bg-brand-200/80 text-dark;
+    }
 }
 
 @layer components {
@@ -35,5 +43,26 @@
     
     .shadow-soft-lg {
         box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .glass-panel {
+        @apply bg-white/70 backdrop-blur-md ring-1 ring-black/5 shadow-soft;
+    }
+
+    .reading-progress {
+        @apply fixed left-0 top-0 z-[9999] h-[3px] w-0 bg-gradient-to-r from-brand-600 to-brand-500 transition-[width] duration-100 ease-out;
+    }
+
+    .dropcap > p:first-of-type::first-letter {
+        @apply float-left mr-3 mt-1 font-display text-5xl sm:text-6xl leading-none text-brand-700;
     }
 }
