@@ -1,5 +1,5 @@
-<x-app-layout>
-    <x-slot name="header">
+<x-admin-layout>
+    <x-slot name="heading">
         <div class="flex items-center justify-between gap-4">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Admin: Subscribers</h2>
 
@@ -90,4 +90,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-admin-layout>

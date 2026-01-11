@@ -1,5 +1,5 @@
-<x-app-layout>
-    <x-slot name="header">
+<x-admin-layout>
+    <x-slot name="heading">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Submission Detail</h2>
             <a href="{{ route('admin.submissions.index') }}" class="text-sm text-gray-700 hover:underline">Back</a>
@@ -80,4 +80,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-admin-layout>

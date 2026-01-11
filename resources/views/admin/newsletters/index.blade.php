@@ -1,5 +1,5 @@
-<x-app-layout>
-    <x-slot name="header">
+<x-admin-layout>
+    <x-slot name="heading">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Admin: Newsletters</h2>
             <a href="{{ route('admin.newsletters.create') }}" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-700">+ Compose</a>
@@ -46,4 +46,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-admin-layout>
