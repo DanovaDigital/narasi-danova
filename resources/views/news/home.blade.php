@@ -1,127 +1,162 @@
 <x-app-layout>
-    <div class="bg-gray-50 py-8">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            {{-- Hero Carousel --}}
-            @if (($trending ?? collect())->count() >= 3)
-            <x-hero-carousel :articles="$trending->take(5)" />
-            @else
-            <div class="flex items-center justify-center rounded-xl bg-white p-12 shadow-sm ring-1 ring-gray-100">
-                <div class="text-center">
-                    <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
-                    </svg>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Belum Ada Artikel Unggulan</h3>
-                    <p class="mt-2 text-sm text-gray-500">Artikel trending akan muncul di sini</p>
-                </div>
-            </div>
-            @endif
+    <div class="bg-paper">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 
-            {{-- Editor's Pick Section --}}
-            @if(($featured ?? collect())->count())
-            <section class="mt-12">
-                <x-section-header
-                    title="Pilihan Editor"
-                    subtitle="Artikel pilihan dari tim redaksi"
-                    :link="route('articles.index')"
-                    link-text="Lihat Semua" />
+            {{-- Must Read Section (Bento Grid) --}}
+            @if(($mustRead ?? collect())->count() >= 3)
+            <section class="mb-10 md:mb-14">
 
-                <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    @foreach($featured->take(4) as $article)
-                    <x-news-card :article="$article" />
-                    @endforeach
-                </div>
-            </section>
-            @else
-            <section class="mt-12">
-                <x-section-header
-                    title="Pilihan Editor"
-                    subtitle="Artikel pilihan dari tim redaksi" />
+                <div class="grid gap-4 lg:grid-cols-2">
+                    {{-- Large Card Left --}}
+                    <x-article-card :article="$mustRead->first()" variant="overlay" class="lg:row-span-2 h-[400px] lg:h-auto" />
 
-                <div class="mt-6 flex items-center justify-center rounded-xl bg-white p-12 shadow-sm ring-1 ring-gray-100">
-                    <div class="text-center">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                        </svg>
-                        <p class="mt-4 text-sm text-gray-500">Belum ada artikel pilihan editor</p>
+                    {{-- Two Smaller Cards Right --}}
+                    <div class="grid gap-4">
+                        @foreach($mustRead->slice(1, 2) as $article)
+                        <x-article-card :article="$article" variant="overlay" class="h-[180px] sm:h-[200px]" />
+                        @endforeach
                     </div>
                 </div>
-            </section>
-            @endif
 
-            {{-- Latest Articles --}}
-            @if(($latest ?? collect())->count())
-            <section class="mt-12">
-                <x-section-header
-                    title="Berita Terbaru"
-                    subtitle="Update berita terkini dari berbagai kategori"
-                    :link="route('articles.index')"
-                    link-text="Lihat Semua" />
-
-                <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    @foreach($latest->take(6) as $article)
-                    <x-news-card :article="$article" />
+                {{-- Additional Must Read Cards --}}
+                @if($mustRead->count() > 3)
+                <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    @foreach($mustRead->slice(3) as $article)
+                    <x-article-card :article="$article" variant="horizontal" />
                     @endforeach
                 </div>
-            </section>
-            @else
-            <section class="mt-12">
-                <x-section-header
-                    title="Berita Terbaru"
-                    subtitle="Update berita terkini dari berbagai kategori" />
-
-                <div class="mt-6 flex items-center justify-center rounded-xl bg-white p-16 shadow-sm ring-1 ring-gray-100">
-                    <div class="text-center">
-                        <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        <h3 class="mt-4 text-lg font-semibold text-gray-900">Belum Ada Artikel</h3>
-                        <p class="mt-2 text-sm text-gray-500">Artikel terbaru akan ditampilkan di sini</p>
-                    </div>
-                </div>
+                @endif
             </section>
             @endif
 
-            {{-- Category Showcase --}}
+            {{-- Story Categories (Horizontal Scroll) --}}
             @if(($topCategories ?? collect())->count())
-            <section class="mt-12">
-                <div class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100">
-                    <h2 class="text-2xl font-bold text-gray-900">Jelajahi Berdasarkan Kategori</h2>
-                    <p class="mt-2 text-gray-600">Temukan berita sesuai minat Anda</p>
+            <section class="mb-10 md:mb-14">
+                <x-section-header
+                    title="Kategori"
+                    subtitle="Jelajahi berdasarkan topik" />
 
-                    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                        @foreach($topCategories->take(6) as $cat)
-                        <a href="{{ route('category.show', $cat->slug) }}" class="group cursor-pointer rounded-lg bg-gray-50 p-5 ring-1 ring-gray-100 transition-all duration-200 ease-in hover:scale-[1.02] hover:bg-white hover:shadow-sm">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <div class="text-lg font-bold text-gray-900">{{ $cat->name }}</div>
-                                    <div class="mt-1 text-sm text-gray-600">{{ (int) $cat->articles_count }} artikel</div>
-                                </div>
-                                <svg class="h-6 w-6 text-primary-600 transition-transform duration-200 ease-in group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
+                <div class="flex gap-4 sm:gap-6 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 sm:-mx-0 sm:px-0">
+                    @foreach($topCategories as $cat)
+                    <x-story-circle :category="$cat" />
+                    @endforeach
+                </div>
+            </section>
+            @endif
+
+            {{-- Trending Section --}}
+            @if(($trending ?? collect())->count())
+            <section class="mb-10 md:mb-14">
+                <x-section-header
+                    title="Trending 🔥"
+                    subtitle="Berita yang sedang hangat" />
+
+                <div class="grid gap-6 lg:grid-cols-3">
+                    {{-- Main Trending Card --}}
+                    @php $mainTrending = $trending->first(); @endphp
+                    <div class="lg:col-span-2">
+                        <x-article-card :article="$mainTrending" variant="overlay" class="h-[350px] sm:h-[400px]" />
+                    </div>
+
+                    {{-- Trending List --}}
+                    <div class="space-y-4 bg-white rounded-2xl p-5 shadow-soft">
+                        <h4 class="font-serif font-bold text-dark text-lg border-b border-gray-100 pb-3">Top Stories</h4>
+                        @foreach($trending->slice(1, 5) as $index => $article)
+                        <div class="flex gap-4 items-start {{ !$loop->last ? 'border-b border-gray-50 pb-4' : '' }}">
+                            <span class="text-2xl font-display font-bold text-brand-200">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                            <div class="flex-1 min-w-0">
+                                <h5 class="font-serif font-bold text-sm text-dark leading-snug line-clamp-2 hover:text-brand-600 transition-colors">
+                                    <a href="{{ route('articles.show', $article->slug) }}">
+                                        {{ $article->title }}
+                                    </a>
+                                </h5>
+                                <p class="text-xs text-gray-400 mt-1">
+                                    {{ $article->published_at?->diffForHumans() }}
+                                </p>
                             </div>
-                        </a>
+                        </div>
                         @endforeach
                     </div>
                 </div>
             </section>
-            @else
-            <section class="mt-12">
-                <div class="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-100">
-                    <h2 class="text-2xl font-bold text-gray-900">Jelajahi Berdasarkan Kategori</h2>
-                    <p class="mt-2 text-gray-600">Temukan berita sesuai minat Anda</p>
+            @endif
 
-                    <div class="mt-6 flex items-center justify-center p-12">
-                        <div class="text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                            </svg>
-                            <p class="mt-4 text-sm text-gray-500">Belum ada kategori tersedia</p>
-                        </div>
+            {{-- Hero Featured Article --}}
+            @if(($featured ?? collect())->count())
+            <section class="mb-10 md:mb-14">
+                <x-section-header
+                    title="Pilihan Editor"
+                    subtitle="Artikel pilihan dari tim redaksi"
+                    :link="route('articles.index')" />
+
+                @php $heroArticle = $featured->first(); @endphp
+                <x-article-card :article="$heroArticle" variant="featured" :show-author="true" />
+            </section>
+            @endif
+
+            {{-- Latest News Grid --}}
+            @if(($latest ?? collect())->count())
+            <section class="mb-10 md:mb-14">
+                <x-section-header
+                    title="Berita Terbaru"
+                    subtitle="Update berita terkini"
+                    :link="route('articles.index')" />
+
+                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    @foreach($latest->take(8) as $article)
+                    <x-article-card :article="$article" variant="standard" :show-excerpt="false" />
+                    @endforeach
+                </div>
+            </section>
+            @endif
+
+
+
+            {{-- Top Creators Section --}}
+            @if(($topCreators ?? collect())->count())
+            <section class="mb-10 md:mb-14">
+                <x-section-header
+                    title="Penulis Teratas"
+                    subtitle="Kreator konten terbaik kami" />
+
+                <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-soft">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 sm:gap-8">
+                        @foreach($topCreators as $author)
+                        <x-creator-avatar :author="$author" />
+                        @endforeach
                     </div>
                 </div>
             </section>
             @endif
+
+            {{-- Newsletter CTA --}}
+            <section class="mb-10 md:mb-14">
+                <div class="bg-gradient-to-br from-dark to-gray-800 rounded-2xl md:rounded-3xl p-8 sm:p-10 md:p-12 text-center text-white overflow-hidden relative">
+                    {{-- Background Pattern --}}
+                    <div class="absolute inset-0 opacity-5">
+                        <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5" />
+                            </pattern>
+                            <rect width="100%" height="100%" fill="url(#grid)" />
+                        </svg>
+                    </div>
+
+                    <div class="relative z-10 max-w-2xl mx-auto">
+                        <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+                            Dapatkan berita terbaru 📬
+                        </h2>
+                        <p class="text-gray-300 mb-6 sm:mb-8 text-sm sm:text-base">
+                            Subscribe newsletter kami dan dapatkan update berita langsung di inbox Anda.
+                        </p>
+
+                        <div class="max-w-md mx-auto">
+                            <x-newsletter-form />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </div>
 </x-app-layout>
