@@ -37,8 +37,8 @@
             class="absolute inset-0">
 
             {{-- Background Image --}}
-            @if($article->featured_image)
-            <img src="{{ $article->featured_image }}" alt="" class="absolute inset-0 h-full w-full object-cover" loading="lazy">
+            @if($article->featured_image_url)
+            <img src="{{ $article->featured_image_url }}" alt="" class="absolute inset-0 h-full w-full object-cover" loading="lazy">
             @else
             <div class="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800"></div>
             @endif

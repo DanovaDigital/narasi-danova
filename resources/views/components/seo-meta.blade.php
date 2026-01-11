@@ -6,7 +6,7 @@
 @php
 $siteName = $siteName ?? config('app.name');
 $url = route('articles.show', $article->slug);
-$imageUrl = $article->featured_image ?? asset('images/default-og.jpg');
+$imageUrl = $article->featured_image_url ?? asset('images/default-og.jpg');
 $author = $article->author ?? $article->admin;
 $publishedDate = $article->published_at?->toIso8601String();
 $modifiedDate = $article->updated_at?->toIso8601String();

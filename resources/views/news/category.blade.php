@@ -34,9 +34,9 @@
                     @php $featured = $articles->first(); @endphp
                     <article class="group mb-8 overflow-hidden rounded-2xl bg-white shadow-soft transition-all duration-200 ease-in hover:shadow-hover">
                         <a href="{{ route('articles.show', $featured->slug) }}" class="block">
-                            @if($featured->featured_image)
+                            @if($featured->featured_image_url)
                             <div class="aspect-video overflow-hidden">
-                                <img src="{{ $featured->featured_image }}" alt="{{ $featured->title }}" class="h-full w-full object-cover transition-transform duration-500 ease-in group-hover:scale-105" loading="lazy">
+                                <img src="{{ $featured->featured_image_url }}" alt="{{ $featured->title }}" class="h-full w-full object-cover transition-transform duration-500 ease-in group-hover:scale-105" loading="lazy">
                             </div>
                             @else
                             <div class="aspect-video bg-gradient-to-br from-gray-200 to-gray-100"></div>

@@ -18,9 +18,9 @@ default => 'group block overflow-hidden rounded-2xl border border-gray-200 bg-wh
 <article {{ $attributes->merge(['class' => $layoutClasses]) }}>
     @if($layout === 'horizontal')
     {{-- Horizontal Layout: Thumbnail + Content --}}
-    @if($article->featured_image)
+    @if($article->featured_image_url)
     <div class="h-20 w-28 flex-shrink-0 overflow-hidden rounded-xl sm:h-24 sm:w-32">
-        <img src="{{ $article->featured_image }}"
+        <img src="{{ $article->featured_image_url }}"
             alt="{{ $article->title }}"
             class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
             loading="lazy">
@@ -58,9 +58,9 @@ default => 'group block overflow-hidden rounded-2xl border border-gray-200 bg-wh
     @else
     {{-- Vertical Layout: Image on top --}}
     <a href="{{ route('articles.show', $article->slug) }}" class="block">
-        @if($article->featured_image)
+        @if($article->featured_image_url)
         <div class="aspect-video overflow-hidden">
-            <img src="{{ $article->featured_image }}"
+            <img src="{{ $article->featured_image_url }}"
                 alt="{{ $article->title }}"
                 class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 loading="lazy">
