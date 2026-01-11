@@ -1,6 +1,6 @@
 import defaultTheme from "tailwindcss/defaultTheme";
 import forms from "@tailwindcss/forms";
-// typography plugin removed intentionally
+import typography from "@tailwindcss/typography";
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -13,9 +13,14 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ["Inter", "system-ui", ...defaultTheme.fontFamily.sans],
-                serif: ["Merriweather", "Georgia", "serif"],
-                mono: ["JetBrains Mono", ...defaultTheme.fontFamily.mono],
+                sans: [
+                    "DM Sans",
+                    "Inter",
+                    "system-ui",
+                    ...defaultTheme.fontFamily.sans,
+                ],
+                serif: ["Merriweather", "Playfair Display", "Georgia", "serif"],
+                display: ["Libre Baskerville", "Playfair Display", "serif"],
             },
             fontSize: {
                 xs: ["0.75rem", { lineHeight: "1rem" }],
@@ -30,30 +35,34 @@ export default {
                 "6xl": ["3.75rem", { lineHeight: "1.12" }],
             },
             colors: {
-                primary: {
-                    50: "#eff6ff",
-                    100: "#dbeafe",
-                    200: "#bfdbfe",
-                    300: "#93c5fd",
-                    400: "#60a5fa",
-                    500: "#3b82f6",
-                    600: "#2563eb",
-                    700: "#1d4ed8",
-                    800: "#1e40af",
-                    900: "#1e3a8a",
-                    950: "#172554",
+                // Brand colors (Red theme)
+                brand: {
+                    50: "#FEF2F2",
+                    100: "#FEE2E2",
+                    200: "#FECACA",
+                    300: "#FCA5A5",
+                    400: "#F87171",
+                    500: "#EF4444",
+                    600: "#DC2626",
+                    700: "#B91C1C",
+                    800: "#991B1B",
+                    900: "#7F1D1D",
                 },
-                accent: {
-                    50: "#fdf4ff",
-                    100: "#fae8ff",
-                    200: "#f5d0fe",
-                    300: "#f0abfc",
-                    400: "#e879f9",
-                    500: "#d946ef",
-                    600: "#c026d3",
-                    700: "#a21caf",
-                    800: "#86198f",
-                    900: "#701a75",
+                // Editorial colors
+                paper: "#FAFAFA",
+                dark: "#18181B",
+                // Keep primary as alias to brand for backward compatibility
+                primary: {
+                    50: "#FEF2F2",
+                    100: "#FEE2E2",
+                    200: "#FECACA",
+                    300: "#FCA5A5",
+                    400: "#F87171",
+                    500: "#EF4444",
+                    600: "#DC2626",
+                    700: "#B91C1C",
+                    800: "#991B1B",
+                    900: "#7F1D1D",
                 },
             },
             spacing: {
@@ -66,9 +75,65 @@ export default {
                 "8xl": "88rem",
                 "9xl": "96rem",
             },
-            // typography customization removed to avoid dependency on @tailwindcss/typography
+            boxShadow: {
+                soft: "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+                hover: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
+                card: "0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04)",
+            },
+            borderRadius: {
+                xl: "1rem",
+                "2xl": "1.5rem",
+                "3xl": "2rem",
+            },
+            keyframes: {
+                fadeInUp: {
+                    "0%": { opacity: "0", transform: "translateY(12px)" },
+                    "100%": { opacity: "1", transform: "translateY(0)" },
+                },
+                wiggle: {
+                    "0%, 100%": { transform: "rotate(-1deg)" },
+                    "50%": { transform: "rotate(1deg)" },
+                },
+            },
+            animation: {
+                "fade-in-up": "fadeInUp 0.5s ease-out both",
+                wiggle: "wiggle 1s ease-in-out infinite",
+            },
+            typography: (theme) => ({
+                DEFAULT: {
+                    css: {
+                        maxWidth: "none",
+                        color: theme("colors.gray.700"),
+                        a: {
+                            color: theme("colors.brand.600"),
+                            "&:hover": {
+                                color: theme("colors.brand.700"),
+                            },
+                        },
+                        h1: {
+                            fontFamily: theme("fontFamily.display").join(", "),
+                            fontWeight: "700",
+                        },
+                        h2: {
+                            fontFamily: theme("fontFamily.serif").join(", "),
+                            fontWeight: "700",
+                        },
+                        h3: {
+                            fontFamily: theme("fontFamily.serif").join(", "),
+                            fontWeight: "600",
+                        },
+                    },
+                },
+                red: {
+                    css: {
+                        "--tw-prose-links": theme("colors.brand.600"),
+                        "--tw-prose-counters": theme("colors.brand.600"),
+                        "--tw-prose-bullets": theme("colors.brand.400"),
+                    },
+                },
+            }),
         },
     },
 
-    plugins: [forms],
+    plugins: [forms, typography],
 };
