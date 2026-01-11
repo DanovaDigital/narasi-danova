@@ -20,16 +20,17 @@ class AdminAuthenticationTest extends TestCase
 
     public function test_admin_can_authenticate_using_the_login_screen(): void
     {
+        config(['news.admin_key' => 'test-admin-key']);
+
         $admin = Admin::query()->create([
             'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
             'role' => 'super_admin',
+            'pin_hash' => Hash::make('123456'),
         ]);
 
         $response = $this->post('/admin/login', [
-            'email' => $admin->email,
-            'password' => 'password',
+            'admin_key' => 'test-admin-key',
+            'pin' => '123456',
         ]);
 
         $response->assertRedirect(route('admin.dashboard', absolute: false));
@@ -38,10 +39,10 @@ class AdminAuthenticationTest extends TestCase
 
     public function test_admin_can_logout(): void
     {
+        config(['news.admin_key' => 'test-admin-key']);
+
         $admin = Admin::query()->create([
             'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
             'role' => 'super_admin',
         ]);
 

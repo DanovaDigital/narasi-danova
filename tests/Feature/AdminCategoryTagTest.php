@@ -21,8 +21,6 @@ class AdminCategoryTagTest extends TestCase
     {
         $admin = Admin::query()->create([
             'name' => 'Admin',
-            'email' => 'admin1@example.com',
-            'password' => 'password',
             'role' => 'super_admin',
         ]);
 
@@ -40,8 +38,6 @@ class AdminCategoryTagTest extends TestCase
     {
         $admin = Admin::query()->create([
             'name' => 'Admin',
-            'email' => 'admin2@example.com',
-            'password' => 'password',
             'role' => 'super_admin',
         ]);
 

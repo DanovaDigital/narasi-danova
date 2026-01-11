@@ -22,8 +22,6 @@ class AdminSubmissionsReviewTest extends TestCase
     {
         $admin = Admin::query()->create([
             'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
             'role' => 'super_admin',
         ]);
 
