@@ -12,7 +12,7 @@
         alt="{{ $author->name }}"
         class="h-10 w-10 rounded-full">
     @else
-    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 text-sm font-bold text-primary-700">
+    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-700">
         {{ strtoupper(substr($author->name, 0, 1)) }}
     </div>
     @endif
@@ -21,7 +21,7 @@
     <div class="flex-1">
         <div class="flex items-center gap-2">
             <a href="{{ route('author.show', $author->slug) }}"
-                class="font-semibold text-gray-900 hover:text-primary-600">
+                class="font-semibold text-dark hover:text-brand-600">
                 {{ $author->name }}
             </a>
         </div>
