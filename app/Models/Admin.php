@@ -12,20 +12,19 @@ class Admin extends Authenticatable
 
     protected $fillable = [
         'name',
-        'email',
-        'password',
         'role',
+        'pin_hash',
     ];
 
     protected $hidden = [
-        'password',
         'remember_token',
+        'pin_hash',
     ];
 
     protected function casts(): array
     {
         return [
-            'password' => 'hashed',
+            // no password-based auth for admins
         ];
     }
 
