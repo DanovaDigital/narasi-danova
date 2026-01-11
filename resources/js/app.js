@@ -4,6 +4,55 @@ import Alpine from "alpinejs";
 
 window.Alpine = Alpine;
 
+Alpine.data("smartHeader", () => ({
+    scrolled: false,
+    init() {
+        const onScroll = () => {
+            this.scrolled = window.scrollY > 8;
+        };
+
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+    },
+}));
+
+Alpine.data("readingProgress", () => ({
+    progress: 0,
+    init() {
+        const articleEl = this.$refs.article;
+        if (!articleEl) return;
+
+        const update = () => {
+            const rect = articleEl.getBoundingClientRect();
+            const articleTop = window.scrollY + rect.top;
+            const articleHeight = articleEl.offsetHeight;
+            const windowHeight = window.innerHeight;
+            const scrollTop = window.scrollY;
+
+            const scrollableHeight = Math.max(1, articleHeight - windowHeight);
+            const scrolledFromArticle = scrollTop - articleTop + windowHeight;
+
+            this.progress = Math.max(
+                0,
+                Math.min(100, (scrolledFromArticle / scrollableHeight) * 100)
+            );
+        };
+
+        let raf = 0;
+        const scheduleUpdate = () => {
+            if (raf) return;
+            raf = window.requestAnimationFrame(() => {
+                raf = 0;
+                update();
+            });
+        };
+
+        update();
+        window.addEventListener("scroll", scheduleUpdate, { passive: true });
+        window.addEventListener("resize", scheduleUpdate, { passive: true });
+    },
+}));
+
 Alpine.start();
 
 document.addEventListener("submit", async (event) => {
