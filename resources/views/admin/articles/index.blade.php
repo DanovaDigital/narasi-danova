@@ -24,6 +24,7 @@
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Category</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Author</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Views</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
                         <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                     </tr>
@@ -49,6 +50,7 @@
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600">{{ $article->category?->name ?? '-' }}</td>
                         <td class="px-6 py-4 text-sm text-gray-600">{{ $article->author?->name ?? '-' }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-600">{{ number_format((int) $article->views_count) }}</td>
                         <td class="px-6 py-4 text-sm text-gray-500">{{ $article->published_at?->format('d M Y') ?? '-' }}</td>
                         <td class="px-6 py-4 text-right text-sm font-medium">
                             <a href="{{ route('admin.articles.edit', $article) }}" class="text-brand-600 hover:text-brand-700">Edit</a>
@@ -56,7 +58,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                        <td colspan="8" class="px-6 py-12 text-center text-gray-500">
                             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>

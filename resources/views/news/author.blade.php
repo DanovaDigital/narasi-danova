@@ -1,4 +1,21 @@
 <x-app-layout>
+    @push('title')
+    {{ $author->name }} | {{ \App\Models\SiteSetting::getValue('site_name', config('app.name')) }}
+    @endpush
+
+    @push('seo')
+    <x-seo-default
+        title="{{ $author->name }} | {{ \App\Models\SiteSetting::getValue('site_name', config('app.name')) }}"
+        :description="($author->bio ?: ('Profil penulis ' . $author->name . ' dan kumpulan artikelnya.'))"
+        :canonical="route('author.show', $author->slug)"
+        :image="$author->avatar_url" />
+    <x-seo-breadcrumbs :items="[
+        ['name' => 'Beranda', 'url' => route('home')],
+        ['name' => 'Penulis', 'url' => route('articles.index')],
+        ['name' => $author->name, 'url' => route('author.show', $author->slug)],
+    ]" />
+    @endpush
+
     {{-- Author Hero Section --}}
     <div class="bg-dark text-white">
         <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">

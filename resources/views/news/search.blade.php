@@ -1,4 +1,20 @@
 <x-app-layout>
+    @push('title')
+    Pencarian Artikel | {{ \App\Models\SiteSetting::getValue('site_name', config('app.name')) }}
+    @endpush
+
+    @push('seo')
+    <x-seo-default
+        title="Pencarian Artikel | {{ \App\Models\SiteSetting::getValue('site_name', config('app.name')) }}"
+        description="Cari artikel berdasarkan judul, ringkasan, atau isi."
+        :canonical="route('search')"
+        robots="noindex, follow" />
+    <x-seo-breadcrumbs :items="[
+        ['name' => 'Beranda', 'url' => route('home')],
+        ['name' => 'Pencarian', 'url' => route('search')],
+    ]" />
+    @endpush
+
     <div class="border-b border-gray-100 bg-white">
         <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
             <h1 class="font-display text-4xl font-bold text-dark">Pencarian Artikel</h1>

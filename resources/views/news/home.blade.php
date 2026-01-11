@@ -1,4 +1,16 @@
 <x-app-layout>
+    @push('title')
+    {{ \App\Models\SiteSetting::getValue('site_name', config('app.name')) }}
+    @endpush
+
+    @push('seo')
+    <x-seo-default />
+    <x-seo-breadcrumbs :items="[[
+        'name' => 'Beranda',
+        'url' => route('home'),
+    ]]" />
+    @endpush
+
     <div class="bg-paper">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 

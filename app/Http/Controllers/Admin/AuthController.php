@@ -12,33 +12,71 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
+        if (session()->get('admin.credential_verified') === true) {
+            return redirect()->route('admin.pin');
+        }
+
         return view('admin.auth.login');
     }
 
     public function login(Request $request)
     {
         $validated = $request->validate([
-            'admin_key' => ['required', 'string'],
-            'pin' => ['required', 'digits:6'],
+            'credential' => ['required', 'string'],
         ]);
 
-        $expectedKey = (string) config('news.admin_key');
-        if ($expectedKey === '') {
+        $expected = (string) config('news.secret_credential', config('news.admin_key'));
+        if ($expected === '') {
             return back()->withErrors([
-                'admin_key' => 'ADMIN_KEY belum dikonfigurasi di server.',
+                'credential' => 'Admin secret credential belum dikonfigurasi di server.',
             ]);
         }
 
-        if (! hash_equals($expectedKey, (string) $validated['admin_key'])) {
+        if (! hash_equals($expected, (string) $validated['credential'])) {
             return back()->withErrors([
-                'admin_key' => 'Admin key salah.',
-            ])->onlyInput('admin_key');
+                'credential' => 'Secret credential salah.',
+            ])->onlyInput('credential');
         }
+
+        // Set marker untuk step PIN.
+        $request->session()->put('admin.credential_verified', true);
+        $request->session()->put('admin.credential_verified_at', now()->timestamp);
+
+        return redirect()->route('admin.pin');
+    }
+
+    public function showPin(Request $request)
+    {
+        if ($request->session()->get('admin.credential_verified') !== true) {
+            return redirect()->route('admin.login');
+        }
+
+        $verifiedAt = (int) $request->session()->get('admin.credential_verified_at', 0);
+        // Expire step 1 after 10 minutes.
+        if ($verifiedAt > 0 && now()->timestamp - $verifiedAt > 600) {
+            $request->session()->forget(['admin.credential_verified', 'admin.credential_verified_at']);
+            return redirect()->route('admin.login')->withErrors([
+                'credential' => 'Sesi verifikasi credential kadaluarsa. Silakan ulangi.',
+            ]);
+        }
+
+        return view('admin.auth.pin');
+    }
+
+    public function verifyPin(Request $request)
+    {
+        if ($request->session()->get('admin.credential_verified') !== true) {
+            return redirect()->route('admin.login');
+        }
+
+        $validated = $request->validate([
+            'pin' => ['required', 'digits:6'],
+        ]);
 
         $admin = Admin::query()->orderBy('id')->first();
         if (! $admin) {
-            return back()->withErrors([
-                'admin_key' => 'Admin belum dibuat. Jalankan seeder terlebih dahulu.',
+            return redirect()->route('admin.login')->withErrors([
+                'credential' => 'Admin belum dibuat. Jalankan seeder terlebih dahulu.',
             ]);
         }
 
@@ -46,17 +84,18 @@ class AuthController extends Controller
         if (! $admin->pin_hash) {
             return back()->withErrors([
                 'pin' => 'PIN admin belum di-set. Jalankan: php artisan admin:set-pin ' . $admin->id . ' --pin=123456',
-            ])->onlyInput('admin_key');
+            ]);
         }
 
         $pinInput = (string) $validated['pin'];
         if (! Hash::check($pinInput, $admin->pin_hash)) {
             return back()->withErrors([
                 'pin' => 'PIN salah.',
-            ])->onlyInput('admin_key');
+            ]);
         }
 
         Auth::guard('admin')->loginUsingId($admin->id);
+        $request->session()->forget(['admin.credential_verified', 'admin.credential_verified_at']);
         $request->session()->regenerate();
 
         return redirect()->route('admin.dashboard');
@@ -65,6 +104,8 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::guard('admin')->logout();
+
+        $request->session()->forget(['admin.credential_verified', 'admin.credential_verified_at']);
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

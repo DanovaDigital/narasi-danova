@@ -5,9 +5,12 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
+use App\Http\Controllers\Admin\AuthorController as AdminAuthorController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\SubscriberController as AdminSubscriberController;
@@ -23,17 +26,20 @@ $isLocal = app()->environment(['local', 'testing']);
 $registerAdminRoutes = static function (): void {
     Route::middleware('guest:admin')->group(function () {
         Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
-        Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
+        Route::post('/login', [AdminAuthController::class, 'login'])->middleware('throttle:10,1')->name('login.post');
+
+        Route::get('/pin', [AdminAuthController::class, 'showPin'])->name('pin');
+        Route::post('/pin', [AdminAuthController::class, 'verifyPin'])->middleware('throttle:10,1')->name('pin.post');
     });
 
     Route::middleware('auth:admin')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         Route::resource('articles', AdminArticleController::class);
+
+        Route::resource('authors', AdminAuthorController::class)->except(['show']);
 
         Route::resource('categories', AdminCategoryController::class)->except(['show']);
         Route::resource('tags', AdminTagController::class)->except(['show']);
@@ -78,6 +84,23 @@ if (!$isLocal) {
 }
 
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('cache.headers:300');
+Route::get('/robots.txt', function () {
+    $sitemapUrl = (string) route('sitemap');
+    $sitemapUrl = (string) preg_replace('#^http://#i', 'https://', $sitemapUrl);
+
+    $content = "User-agent: *\n" .
+        "Allow: /\n\n" .
+        "# Disallow admin/login pages\n" .
+        "Disallow: /admin/\n" .
+        "Disallow: /login/\n" .
+        "Disallow: /dashboard/\n\n" .
+        "# Sitemap\n" .
+        "Sitemap: {$sitemapUrl}\n";
+
+    return response($content, 200)
+        ->header('Content-Type', 'text/plain; charset=UTF-8');
+})->name('robots')->middleware('cache.headers:3600');
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap')->middleware('cache.headers:3600');
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index')->middleware('cache.headers:300');
 Route::get('/articles/{slug}', [ArticleController::class, 'show'])->name('articles.show')->middleware('cache.headers:600');
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show')->middleware('cache.headers:300');

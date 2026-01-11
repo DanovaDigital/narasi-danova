@@ -19,6 +19,7 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
         $articles = Article::query()
+            ->with(['category', 'author'])
             ->orderByDesc('id')
             ->paginate(20);
 

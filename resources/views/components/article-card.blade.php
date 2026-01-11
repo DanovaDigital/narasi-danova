@@ -68,6 +68,8 @@ $imageSrc = $article->featured_image_display_url;
                 <time datetime="{{ $article->published_at?->toIso8601String() }}">
                     {{ $article->published_at?->format('d M Y') }}
                 </time>
+                <span>•</span>
+                <span>{{ number_format((int) $article->views_count) }} views</span>
                 @if(!empty($article->read_time_minutes))
                 <span>•</span>
                 <span>{{ (int) $article->read_time_minutes }} min read</span>
@@ -106,6 +108,8 @@ $imageSrc = $article->featured_image_display_url;
                 <time datetime="{{ $article->published_at?->toIso8601String() }}">
                     {{ $article->published_at?->format('d M Y') }}
                 </time>
+                <span>•</span>
+                <span>{{ number_format((int) $article->views_count) }} views</span>
                 @if(!empty($article->read_time_minutes))
                 <span>•</span>
                 <span>{{ (int) $article->read_time_minutes }} min</span>
@@ -146,6 +150,8 @@ $imageSrc = $article->featured_image_display_url;
             <time datetime="{{ $article->published_at?->toIso8601String() }}">
                 {{ $article->published_at?->diffForHumans() }}
             </time>
+            <span>•</span>
+            <span>{{ number_format((int) $article->views_count) }} views</span>
             @if(!empty($article->read_time_minutes))
             <span>•</span>
             <span>{{ (int) $article->read_time_minutes }} min</span>
@@ -174,6 +180,8 @@ $imageSrc = $article->featured_image_display_url;
         <time datetime="{{ $article->published_at?->toIso8601String() }}">
             {{ $article->published_at?->format('d M Y') }}
         </time>
+        <span>•</span>
+        <span>{{ number_format((int) $article->views_count) }} views</span>
         @if(!empty($article->read_time_minutes))
         <span>•</span>
         <span>{{ (int) $article->read_time_minutes }} min</span>
@@ -222,6 +230,8 @@ $imageSrc = $article->featured_image_display_url;
             <time datetime="{{ $article->published_at?->toIso8601String() }}">
                 {{ $article->published_at?->format('d M Y') }}
             </time>
+            <span>•</span>
+            <span>{{ number_format((int) $article->views_count) }} views</span>
             @if(!empty($article->read_time_minutes))
             <span>•</span>
             <span>{{ (int) $article->read_time_minutes }} min</span>

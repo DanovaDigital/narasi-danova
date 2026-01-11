@@ -1,12 +1,31 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@php
+$lang = str_replace('_', '-', app()->getLocale());
+if ($lang === 'id') {
+$lang = 'id-ID';
+}
+@endphp
+<html lang="{{ $lang }}">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    @php
+    $titleFromStack = trim($__env->yieldPushContent('title'));
+    $siteName = config('app.name', 'Laravel');
+    $seoFromStack = trim($__env->yieldPushContent('seo'));
+    @endphp
+
+    <title>{{ $titleFromStack !== '' ? $titleFromStack : $siteName }}</title>
+
+    @if ($seoFromStack !== '')
+    {!! $seoFromStack !!}
+    @else
+    <x-seo-default :site-name="$siteName" robots="noindex, nofollow" />
+    @endif
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -1,6 +1,18 @@
 <x-app-layout>
-    @push('head')
+    @push('seo')
     <x-seo-meta :article="$article" />
+    @php
+    $breadcrumbItems = [
+    ['name' => 'Beranda', 'url' => route('home')],
+    ];
+
+    if ($article->category) {
+    $breadcrumbItems[] = ['name' => $article->category->name, 'url' => route('category.show', $article->category->slug)];
+    }
+
+    $breadcrumbItems[] = ['name' => $article->title, 'url' => route('articles.show', $article->slug)];
+    @endphp
+    <x-seo-breadcrumbs :items="$breadcrumbItems" />
     @endpush
 
     <div x-data="readingProgress" x-init="init">

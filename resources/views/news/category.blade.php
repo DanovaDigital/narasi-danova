@@ -1,4 +1,20 @@
 <x-app-layout>
+    @push('title')
+    {{ $category->name }} | {{ \App\Models\SiteSetting::getValue('site_name', config('app.name')) }}
+    @endpush
+
+    @push('seo')
+    <x-seo-default
+        title="{{ $category->name }} | {{ \App\Models\SiteSetting::getValue('site_name', config('app.name')) }}"
+        :description="($category->description ?: ('Kumpulan artikel terbaru untuk kategori ' . $category->name . '.'))"
+        :canonical="route('category.show', $category->slug)" />
+    <x-seo-breadcrumbs :items="[
+        ['name' => 'Beranda', 'url' => route('home')],
+        ['name' => 'Kategori', 'url' => route('articles.index')],
+        ['name' => $category->name, 'url' => route('category.show', $category->slug)],
+    ]" />
+    @endpush
+
     {{-- Category Hero Header --}}
     <div class="bg-dark text-white">
         <div class="mx-auto max-w-7xl px-4 py-12 sm:py-16 sm:px-6 lg:px-8">

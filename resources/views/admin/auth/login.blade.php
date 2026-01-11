@@ -36,52 +36,29 @@
                 <form method="POST" action="{{ route('admin.login.post') }}" class="space-y-6">
                     @csrf
 
-                    {{-- Admin Key Field --}}
+                    {{-- Secret Credential Field --}}
                     <div>
-                        <label class="block text-sm font-semibold text-gray-900" for="admin_key">
-                            Admin Key
+                        <label class="block text-sm font-semibold text-gray-900" for="credential">
+                            Secret Credential
                         </label>
                         <div class="mt-2">
                             <input
-                                id="admin_key"
-                                name="admin_key"
+                                id="credential"
+                                name="credential"
                                 type="password"
                                 class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm transition-all focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20"
-                                value="{{ old('admin_key') }}"
+                                value="{{ old('credential') }}"
                                 required
                                 autofocus>
                         </div>
 
                     </div>
 
-                    {{-- PIN Field --}}
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-900">
-                            PIN
-                        </label>
-                        <p class="mt-1 text-xs text-gray-600">PIN wajib 6 digit.</p>
-
-                        <input type="hidden" name="pin" id="pin" value="">
-
-                        <div class="mt-3 flex items-center justify-between gap-2" data-pin-root>
-                            @for ($i = 0; $i < 6; $i++)
-                                <input
-                                type="text"
-                                inputmode="numeric"
-                                pattern="[0-9]*"
-                                maxlength="1"
-                                autocomplete="one-time-code"
-                                class="pin-box block w-12 rounded-lg border border-gray-300 bg-white px-0 py-3 text-center text-lg font-semibold tracking-widest text-gray-900 transition-all focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20"
-                                aria-label="PIN digit {{ $i + 1 }}">
-                                @endfor
-                        </div>
-                    </div>
-
                     {{-- Submit Button --}}
                     <button
                         type="submit"
                         class="w-full rounded-lg bg-gray-900 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-gray-800 active:scale-[0.98]">
-                        Masuk ke Dashboard
+                        Lanjut ke PIN
                     </button>
                 </form>
             </div>
@@ -89,74 +66,7 @@
         </div>
     </div>
 
-    <script>
-        (function() {
-            const root = document.querySelector('[data-pin-root]');
-            const hidden = document.getElementById('pin');
-            if (!root || !hidden) return;
 
-            const inputs = Array.from(root.querySelectorAll('input.pin-box'));
-            const form = root.closest('form');
-
-            function syncHidden() {
-                hidden.value = inputs.map(i => i.value).join('');
-            }
-
-            function focusIndex(idx) {
-                if (idx < 0 || idx >= inputs.length) return;
-                inputs[idx].focus();
-                inputs[idx].select();
-            }
-
-            inputs.forEach((input, idx) => {
-                input.addEventListener('input', (e) => {
-                    const v = (e.target.value || '').replace(/\D/g, '');
-                    e.target.value = v.slice(-1);
-                    syncHidden();
-                    if (e.target.value && idx < inputs.length - 1) focusIndex(idx + 1);
-                });
-
-                input.addEventListener('keydown', (e) => {
-                    if (e.key === 'Backspace' && !input.value && idx > 0) {
-                        focusIndex(idx - 1);
-                    }
-                    if (e.key === 'ArrowLeft') {
-                        e.preventDefault();
-                        focusIndex(idx - 1);
-                    }
-                    if (e.key === 'ArrowRight') {
-                        e.preventDefault();
-                        focusIndex(idx + 1);
-                    }
-                });
-
-                input.addEventListener('paste', (e) => {
-                    const text = (e.clipboardData || window.clipboardData).getData('text') || '';
-                    const digits = text.replace(/\D/g, '').slice(0, inputs.length);
-                    if (!digits) return;
-                    e.preventDefault();
-                    digits.split('').forEach((d, i) => {
-                        if (inputs[i]) inputs[i].value = d;
-                    });
-                    syncHidden();
-                    focusIndex(Math.min(digits.length, inputs.length - 1));
-                });
-            });
-
-            form?.addEventListener('submit', (e) => {
-                syncHidden();
-                if (hidden.value.length !== inputs.length) {
-                    e.preventDefault();
-                    // focus first empty
-                    const firstEmpty = inputs.findIndex(i => !i.value);
-                    focusIndex(firstEmpty === -1 ? 0 : firstEmpty);
-                }
-            });
-
-            // autofocus first box for convenience
-            setTimeout(() => focusIndex(0), 0);
-        })();
-    </script>
 </body>
 
 </html>

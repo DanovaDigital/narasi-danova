@@ -1,4 +1,19 @@
 <x-app-layout>
+    @push('title')
+    Semua Artikel | {{ \App\Models\SiteSetting::getValue('site_name', config('app.name')) }}
+    @endpush
+
+    @push('seo')
+    <x-seo-default
+        title="Semua Artikel | {{ \App\Models\SiteSetting::getValue('site_name', config('app.name')) }}"
+        description="Jelajahi semua artikel yang sudah dipublikasikan."
+        :canonical="route('articles.index')" />
+    <x-seo-breadcrumbs :items="[
+        ['name' => 'Beranda', 'url' => route('home')],
+        ['name' => 'Semua Artikel', 'url' => route('articles.index')],
+    ]" />
+    @endpush
+
     <x-slot name="header">
         <div class="border-b border-gray-100 bg-white">
             <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">

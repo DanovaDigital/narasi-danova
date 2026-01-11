@@ -16,13 +16,16 @@ class RequireAdminKey
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $expected = (string) config('news.admin_key');
+        $expected = (string) config('news.secret_credential', config('news.admin_key'));
 
         if ($expected === '') {
-            throw new HttpException(500, 'ADMIN_KEY is not configured.');
+            throw new HttpException(500, 'Admin secret credential is not configured.');
         }
 
-        $provided = (string) $request->header('X-Admin-Key', $request->query('admin_key', ''));
+        $provided = (string) $request->header(
+            'X-Admin-Credential',
+            $request->query('credential', $request->query('admin_key', ''))
+        );
 
         if (! hash_equals($expected, $provided)) {
             throw new HttpException(403, 'Forbidden');
