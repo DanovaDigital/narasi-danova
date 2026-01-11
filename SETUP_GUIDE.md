@@ -21,8 +21,15 @@ ADMIN_NOTIFICATION_EMAILS=admin-notify@example.com,other@example.com
 Kalau kamu pakai subdomain admin (mis. `admin.your-domain.com`), tambahkan:
 
 ```bash
+ADMIN_HOST=admin.your-domain.com
+ADMIN_URL=https://admin.your-domain.com
 SESSION_DOMAIN=.your-domain.com
 ```
+
+Catatan:
+
+-   Dengan `ADMIN_HOST` aktif, akses URL `/admin/*` dari domain utama akan otomatis redirect ke subdomain admin.
+-   Di subdomain admin, URL panel admin tetap berada di `/admin/*` (contoh: `https://admin.your-domain.com/admin/login`).
 
 ## 2) Jalankan Migration
 
@@ -58,6 +65,30 @@ php artisan admin:set-pin 1 --pin=123456
 ```
 
 Catatan: login admin akan ditolak kalau PIN belum diset.
+
+## Local Dev (tanpa subdomain admin)
+
+Untuk local biasanya **tidak pakai subdomain**, jadi admin tetap akses di `/admin/*`.
+
+Di `.env` local:
+
+```bash
+APP_URL=http://localhost:8000
+ADMIN_HOST=
+ADMIN_URL=
+SESSION_DOMAIN=null
+```
+
+Lalu jalankan server:
+
+```bash
+php artisan serve
+```
+
+Akses:
+
+-   Public: `http://localhost:8000/`
+-   Admin: `http://localhost:8000/admin/login`
 
 ## Hostinger Quick Deploy (Shared Hosting)
 

@@ -16,6 +16,18 @@ use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\NewsletterController as AdminNewsletterController;
 use Illuminate\Support\Facades\Route;
 
+$adminHost = config('app.admin_host');
+
+if (!empty($adminHost)) {
+    Route::domain($adminHost)->get('/', function () {
+        if (auth('admin')->check()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('admin.login');
+    })->name('admin.root');
+}
+
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('cache.headers:300');
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index')->middleware('cache.headers:300');
 Route::get('/articles/{slug}', [ArticleController::class, 'show'])->name('articles.show')->middleware('cache.headers:600');
@@ -27,7 +39,7 @@ Route::post('/subscribe', [SubscriberController::class, 'store'])->middleware('t
 Route::get('/subscribe/verify/{token}', [SubscriberController::class, 'verify'])->name('subscribe.verify');
 Route::get('/unsubscribe/{token}', [SubscriberController::class, 'unsubscribe'])->name('unsubscribe');
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware('admin.host')->group(function () {
     Route::middleware('guest:admin')->group(function () {
         Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
         Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
