@@ -15,31 +15,12 @@ use App\Http\Controllers\Admin\SubmissionController as AdminSubmissionController
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\NewsletterController as AdminNewsletterController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 $adminHost = config('app.admin_host');
+$isLocal = app()->environment(['local', 'testing']);
 
-if (!empty($adminHost)) {
-    Route::domain($adminHost)->get('/', function () {
-        if (auth('admin')->check()) {
-            return redirect()->route('admin.dashboard');
-        }
-
-        return redirect()->route('admin.login');
-    })->name('admin.root');
-}
-
-Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('cache.headers:300');
-Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index')->middleware('cache.headers:300');
-Route::get('/articles/{slug}', [ArticleController::class, 'show'])->name('articles.show')->middleware('cache.headers:600');
-Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show')->middleware('cache.headers:300');
-Route::get('/author/{slug}', [AuthorController::class, 'show'])->name('author.show')->middleware('cache.headers:300');
-Route::get('/search', SearchController::class)->name('search');
-
-Route::post('/subscribe', [SubscriberController::class, 'store'])->middleware('throttle:5,1')->name('subscribe');
-Route::get('/subscribe/verify/{token}', [SubscriberController::class, 'verify'])->name('subscribe.verify');
-Route::get('/unsubscribe/{token}', [SubscriberController::class, 'unsubscribe'])->name('unsubscribe');
-
-Route::prefix('admin')->name('admin.')->middleware('admin.host')->group(function () {
+$registerAdminRoutes = static function (): void {
     Route::middleware('guest:admin')->group(function () {
         Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
         Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
@@ -67,4 +48,54 @@ Route::prefix('admin')->name('admin.')->middleware('admin.host')->group(function
 
         Route::resource('newsletters', AdminNewsletterController::class)->only(['index', 'create', 'store', 'show']);
     });
-});
+};
+
+if (!$isLocal) {
+    $adminDomain = !empty($adminHost) ? $adminHost : 'admin.{domain}';
+
+    Route::domain($adminDomain)->name('admin.')->group(function () use ($registerAdminRoutes) {
+        Route::get('/', function () {
+            if (auth('admin')->check()) {
+                return redirect()->route('admin.dashboard');
+            }
+
+            return redirect()->route('admin.login');
+        })->name('root');
+
+        // Backward-compat: old URLs on admin subdomain used to be /admin/*.
+        Route::prefix('admin')->get('{any?}', function (Request $request) {
+            $uri = $request->getRequestUri();
+            $uri = preg_replace('#^/admin#', '', $uri, 1);
+            if ($uri === '') {
+                $uri = '/';
+            }
+
+            return redirect()->to($uri);
+        })->where('any', '.*');
+
+        $registerAdminRoutes();
+    });
+}
+
+Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('cache.headers:300');
+Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index')->middleware('cache.headers:300');
+Route::get('/articles/{slug}', [ArticleController::class, 'show'])->name('articles.show')->middleware('cache.headers:600');
+Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show')->middleware('cache.headers:300');
+Route::get('/author/{slug}', [AuthorController::class, 'show'])->name('author.show')->middleware('cache.headers:300');
+Route::get('/search', SearchController::class)->name('search');
+
+Route::post('/subscribe', [SubscriberController::class, 'store'])->middleware('throttle:5,1')->name('subscribe');
+Route::get('/subscribe/verify/{token}', [SubscriberController::class, 'verify'])->name('subscribe.verify');
+Route::get('/unsubscribe/{token}', [SubscriberController::class, 'unsubscribe'])->name('unsubscribe');
+
+// Local/testing: admin panel accessible under /admin/* regardless of ADMIN_HOST.
+if ($isLocal) {
+    Route::prefix('admin')->name('admin.')->middleware('admin.host')->group($registerAdminRoutes);
+} else {
+    // Non-local: admin is served on the admin subdomain; keep /admin/* on main domain blocked/redirected.
+    Route::prefix('admin')->middleware('admin.host')->group(function () {
+        Route::any('{any?}', function () {
+            abort(404);
+        })->where('any', '.*');
+    });
+}
