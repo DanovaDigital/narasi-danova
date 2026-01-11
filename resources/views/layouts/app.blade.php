@@ -24,7 +24,24 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-paper font-sans text-dark antialiased">
+<body class="bg-paper font-sans text-dark antialiased" x-data="pageLoader">
+    <!-- Loading Overlay -->
+    <div x-show="loading"
+        x-cloak
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-white/80 backdrop-blur-sm"
+        style="display: none;">
+        <div class="flex flex-col items-center gap-4">
+            <div class="relative h-16 w-16">
+                <div class="absolute h-full w-full rounded-full border-4 border-gray-200"></div>
+                <div class="absolute h-full w-full animate-spin rounded-full border-4 border-transparent border-t-brand-600"></div>
+            </div>
+            <div class="text-center">
+                <p class="text-lg font-semibold text-dark">Memuat...</p>
+                <p class="mt-1 text-sm text-gray-500">Mohon tunggu sebentar</p>
+            </div>
+        </div>
+    </div>
+
     @include('layouts.navigation')
 
     @if (session('success'))

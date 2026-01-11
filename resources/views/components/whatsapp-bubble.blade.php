@@ -18,14 +18,12 @@ $url = $shouldRender
     rel="noopener noreferrer"
     aria-label="Chat via WhatsApp"
     class="group fixed bottom-6 right-6 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg transition-transform hover:scale-105 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-    <span class="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-full bg-dark/90 px-3 py-1.5 text-xs font-semibold text-white shadow-soft ring-1 ring-white/10 opacity-0 translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 sm:inline-flex">
+    <span class="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-full bg-dark/90 px-3 py-1.5 text-xs font-semibold text-white shadow-soft ring-1 ring-white/10 opacity-0 translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">
         WhatsApp
     </span>
-    <svg viewBox="0 0 32 32" class="h-7 w-7" fill="currentColor" aria-hidden="true">
-        <path
-            d="M19.11 17.38c-.3-.15-1.76-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.8-1.49-1.78-1.67-2.08-.17-.3-.02-.46.13-.61.14-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.48-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.2 3.08c.15.2 2.08 3.18 5.05 4.46.7.3 1.25.48 1.68.62.71.23 1.36.2 1.88.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z" />
-        <path
-            d="M26.67 5.33A13.25 13.25 0 0 0 16 1.33C8.64 1.33 2.67 7.3 2.67 14.67c0 2.34.61 4.62 1.77 6.64L2.67 30.67l9.56-1.74a13.3 13.3 0 0 0 3.77.54c7.36 0 13.33-5.97 13.33-13.33 0-3.56-1.39-6.91-3.66-9.01zM16 27.33c-1.2 0-2.38-.2-3.5-.58l-.5-.17-5.67 1.03 1.04-5.52-.19-.56a10.68 10.68 0 0 1-1.6-5.66C5.58 8.85 10.18 4.25 16 4.25c2.87 0 5.56 1.12 7.59 3.15a10.6 10.6 0 0 1 3.14 7.54c0 5.83-4.6 10.39-10.73 10.39z" />
+    <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M6.014 8.00613C6.12827 7.1024 7.30277 5.87414 8.23488 6.01043L8.23339 6.00894C9.14051 6.18132 9.85859 7.74261 10.2635 8.44465C10.5504 8.95402 10.3641 9.4701 10.0965 9.68787C9.7355 9.97883 9.17099 10.3803 9.28943 10.7834C9.5 11.5 12 14 13.2296 14.7107C13.695 14.9797 14.0325 14.2702 14.3207 13.9067C14.5301 13.6271 15.0466 13.46 15.5548 13.736C16.3138 14.178 17.0288 14.6917 17.69 15.27C18.0202 15.546 18.0977 15.9539 17.8689 16.385C17.4659 17.1443 16.3003 18.1456 15.4542 17.9421C13.9764 17.5868 8 15.27 6.08033 8.55801C5.97237 8.24048 5.99955 8.12044 6.014 8.00613Z" fill="currentColor" />
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 23C10.7764 23 10.0994 22.8687 9 22.5L6.89443 23.5528C5.56462 24.2177 4 23.2507 4 21.7639V19.5C1.84655 17.492 1 15.1767 1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23ZM6 18.6303L5.36395 18.0372C3.69087 16.4772 3 14.7331 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C11.0143 21 10.552 20.911 9.63595 20.6038L8.84847 20.3397L6 21.7639V18.6303Z" fill="currentColor" />
     </svg>
 </a>
 @endif

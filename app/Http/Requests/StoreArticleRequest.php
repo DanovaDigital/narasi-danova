@@ -28,6 +28,7 @@ class StoreArticleRequest extends FormRequest
             'slug' => ['required', 'string', 'max:255', 'unique:articles,slug'],
             'excerpt' => ['nullable', 'string'],
             'body' => ['required', 'string'],
+            'featured_image' => ['nullable', 'image', 'max:4096'],
             'status' => ['required', 'in:draft,published'],
             'published_at' => ['nullable', 'date'],
         ];

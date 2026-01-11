@@ -85,10 +85,10 @@
             </header>
 
             {{-- Featured Image --}}
-            @if($article->featured_image)
+            @if($article->featured_image_url)
             <div class="w-full bg-gray-100">
                 <div class="mx-auto max-w-5xl">
-                    <img src="{{ $article->featured_image }}" alt="{{ $article->title }}"
+                    <img src="{{ $article->featured_image_url }}" alt="{{ $article->title }}"
                         class="w-full h-auto max-h-[500px] object-cover">
                 </div>
             </div>

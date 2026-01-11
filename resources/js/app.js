@@ -4,6 +4,32 @@ import Alpine from "alpinejs";
 
 window.Alpine = Alpine;
 
+// Page loading state
+Alpine.data("pageLoader", () => ({
+    loading: false,
+    init() {
+        // Show loading when navigating away
+        document.addEventListener("click", (e) => {
+            const link = e.target.closest("a");
+            if (
+                link &&
+                link.href &&
+                !link.target &&
+                link.href.startsWith(window.location.origin) &&
+                !link.href.includes("#") &&
+                !link.hasAttribute("data-no-loader")
+            ) {
+                this.loading = true;
+            }
+        });
+
+        // Hide loading on page load
+        window.addEventListener("pageshow", () => {
+            this.loading = false;
+        });
+    },
+}));
+
 Alpine.data("smartHeader", () => ({
     scrolled: false,
     init() {

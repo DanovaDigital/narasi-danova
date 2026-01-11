@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Article extends Model
@@ -21,10 +22,11 @@ class Article extends Model
         'title',
         'slug',
         'excerpt',
-        'content',
+        'body',
         'featured_image',
         'is_featured',
         'is_published',
+        'status',
         'published_at',
         'views_count',
         'meta_title',
@@ -91,6 +93,32 @@ class Article extends Model
         }
 
         return $this->attributes['body'] ?? null;
+    }
+
+    public function getFeaturedImageUrlAttribute(): ?string
+    {
+        $path = (string) ($this->featured_image ?? '');
+        $path = trim($path);
+
+        if ($path === '') {
+            return null;
+        }
+
+        if (preg_match('#^https?://#i', $path) || str_starts_with($path, '/')) {
+            return $path;
+        }
+
+        $relative = ltrim($path, '/');
+        if (!Storage::disk('public')->exists($relative)) {
+            return null;
+        }
+
+        return asset('storage/' . $relative);
+    }
+
+    public function getFeaturedImageDisplayUrlAttribute(): string
+    {
+        return $this->featured_image_url ?: asset('images/article-placeholder.svg');
     }
 
     public function getMetaTitleAttribute($value)

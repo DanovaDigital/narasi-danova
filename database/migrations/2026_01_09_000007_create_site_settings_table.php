@@ -22,7 +22,7 @@ return new class extends Migration
             ['key' => 'site_name', 'value' => 'News Portal', 'type' => 'text', 'group' => 'general', 'created_at' => now(), 'updated_at' => now()],
             ['key' => 'site_description', 'value' => 'Portal berita terkini', 'type' => 'textarea', 'group' => 'general', 'created_at' => now(), 'updated_at' => now()],
             ['key' => 'site_logo', 'value' => null, 'type' => 'image', 'group' => 'general', 'created_at' => now(), 'updated_at' => now()],
-            ['key' => 'whatsapp_number', 'value' => '62812XXXXXXXX', 'type' => 'text', 'group' => 'contact', 'created_at' => now(), 'updated_at' => now()],
+            ['key' => 'whatsapp_number', 'value' => '6281234567890', 'type' => 'text', 'group' => 'contact', 'created_at' => now(), 'updated_at' => now()],
             ['key' => 'whatsapp_message', 'value' => 'Halo, saya ingin mengajukan berita', 'type' => 'textarea', 'group' => 'contact', 'created_at' => now(), 'updated_at' => now()],
             ['key' => 'footer_text', 'value' => '© 2024 News Portal. All rights reserved.', 'type' => 'textarea', 'group' => 'general', 'created_at' => now(), 'updated_at' => now()],
             ['key' => 'articles_per_page', 'value' => '12', 'type' => 'text', 'group' => 'display', 'created_at' => now(), 'updated_at' => now()],

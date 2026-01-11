@@ -13,7 +13,7 @@
 
         <div class="bg-white rounded-xl shadow-soft border border-gray-200">
             <div class="p-6">
-                <form method="POST" action="{{ route('admin.articles.update', $article) }}" class="space-y-6">
+                <form method="POST" action="{{ route('admin.articles.update', $article) }}" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     @method('PUT')
 
@@ -55,6 +55,28 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1" for="excerpt">Excerpt</label>
                         <textarea id="excerpt" name="excerpt" rows="3" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500">{{ old('excerpt', $article->excerpt) }}</textarea>
                         @error('excerpt')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="featured_image">Featured Image</label>
+
+                        @if($article->featured_image_url)
+                        <div class="mb-3 flex items-start gap-4">
+                            <img src="{{ $article->featured_image_url }}" alt="{{ $article->title }}" class="h-20 w-32 rounded-lg object-cover border border-gray-200" />
+                            <div class="pt-1">
+                                <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                                    <input type="checkbox" name="remove_featured_image" value="1" class="rounded border-gray-300 text-brand-600 focus:ring-brand-500" />
+                                    <span>Remove current image</span>
+                                </label>
+                                <p class="mt-1 text-xs text-gray-500">Upload file baru untuk mengganti.</p>
+                            </div>
+                        </div>
+                        @endif
+
+                        <input id="featured_image" type="file" name="featured_image" accept="image/*" class="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm file:mr-4 file:rounded-md file:border-0 file:bg-gray-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-gray-700 hover:file:bg-gray-200" />
+                        <p class="mt-1 text-xs text-gray-500">Disarankan landscape (mis. 1200×630). Max 4MB.</p>
+                        @error('featured_image')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                        @error('remove_featured_image')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                     </div>
 
                     <div>

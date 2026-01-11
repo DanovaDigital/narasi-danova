@@ -17,20 +17,26 @@ default => 'group flex flex-col gap-3',
 };
 @endphp
 
+@php
+$placeholder = asset('images/article-placeholder.svg');
+$imageSrc = $article->featured_image_display_url;
+@endphp
+
 <article {{ $attributes->merge(['class' => $variantClasses]) }}>
 
     @if($variant === 'featured')
     {{-- Featured/Hero Card - Large layout with side-by-side content --}}
     <div class="grid md:grid-cols-2 gap-4 md:gap-8 items-center bg-white md:bg-transparent rounded-2xl overflow-hidden">
         <a href="{{ route('articles.show', $article->slug) }}" class="block overflow-hidden rounded-2xl">
-            @if($article->featured_image)
-            <img src="{{ $article->featured_image }}"
-                alt="{{ $article->title }}"
-                class="w-full h-full aspect-video md:aspect-[4/3] object-cover shadow-soft transition-transform duration-500 group-hover:scale-[1.02]"
-                loading="lazy">
-            @else
-            <div class="w-full aspect-video md:aspect-[4/3] bg-gradient-to-br from-gray-200 to-gray-100 rounded-2xl"></div>
-            @endif
+            <div class="relative">
+                <div data-skeleton class="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-200 to-gray-100 animate-pulse"></div>
+                <img src="{{ $imageSrc }}"
+                    alt="{{ $article->title }}"
+                    class="w-full h-full aspect-video md:aspect-[4/3] object-cover shadow-soft transition-transform duration-500 group-hover:scale-[1.02]"
+                    loading="lazy"
+                    onload="this.previousElementSibling?.classList.add('hidden')"
+                    onerror="this.src='{{ $placeholder }}'; this.previousElementSibling?.classList.add('hidden')">
+            </div>
         </a>
 
         <div class="py-4 md:py-6 px-4 md:px-0">
@@ -74,14 +80,13 @@ default => 'group flex flex-col gap-3',
     @elseif($variant === 'overlay')
     {{-- Overlay/Dark Card - Image background with gradient overlay --}}
     <a href="{{ route('articles.show', $article->slug) }}" class="block h-full">
-        @if($article->featured_image)
-        <img src="{{ $article->featured_image }}"
+        <div data-skeleton class="absolute inset-0 w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 animate-pulse"></div>
+        <img src="{{ $imageSrc }}"
             alt="{{ $article->title }}"
             class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            loading="lazy">
-        @else
-        <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-gray-700 to-gray-900"></div>
-        @endif
+            loading="lazy"
+            onload="this.previousElementSibling?.classList.add('hidden')"
+            onerror="this.src='{{ $placeholder }}'; this.previousElementSibling?.classList.add('hidden')">
 
         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
 
@@ -112,16 +117,15 @@ default => 'group flex flex-col gap-3',
 
     @elseif($variant === 'horizontal')
     {{-- Horizontal Layout: Thumbnail + Content side by side --}}
-    @if($article->featured_image)
-    <div class="h-20 w-28 flex-shrink-0 overflow-hidden rounded-xl sm:h-24 sm:w-32">
-        <img src="{{ $article->featured_image }}"
+    <div class="relative h-20 w-28 flex-shrink-0 overflow-hidden rounded-xl sm:h-24 sm:w-32">
+        <div data-skeleton class="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-100 animate-pulse"></div>
+        <img src="{{ $imageSrc }}"
             alt="{{ $article->title }}"
             class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-            loading="lazy">
+            loading="lazy"
+            onload="this.previousElementSibling?.classList.add('hidden')"
+            onerror="this.src='{{ $placeholder }}'; this.previousElementSibling?.classList.add('hidden')">
     </div>
-    @else
-    <div class="h-20 w-28 flex-shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-gray-200 to-gray-100 sm:h-24 sm:w-32"></div>
-    @endif
 
     <div class="flex-1 min-w-0">
         @if($showCategory && $article->category)
@@ -180,14 +184,15 @@ default => 'group flex flex-col gap-3',
     @else
     {{-- Standard Card: Image on top, content below --}}
     <a href="{{ route('articles.show', $article->slug) }}" class="block overflow-hidden rounded-xl">
-        @if($article->featured_image)
-        <img src="{{ $article->featured_image }}"
-            alt="{{ $article->title }}"
-            class="w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-            loading="lazy">
-        @else
-        <div class="w-full aspect-[4/3] bg-gradient-to-br from-gray-200 to-gray-100 rounded-xl"></div>
-        @endif
+        <div class="relative">
+            <div data-skeleton class="absolute inset-0 rounded-xl bg-gradient-to-br from-gray-200 to-gray-100 animate-pulse"></div>
+            <img src="{{ $imageSrc }}"
+                alt="{{ $article->title }}"
+                class="w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                loading="lazy"
+                onload="this.previousElementSibling?.classList.add('hidden')"
+                onerror="this.src='{{ $placeholder }}'; this.previousElementSibling?.classList.add('hidden')">
+        </div>
     </a>
 
     <div class="flex flex-col">

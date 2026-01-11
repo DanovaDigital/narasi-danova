@@ -62,7 +62,9 @@ Catatan: login admin akan ditolak kalau PIN belum diset.
 ## Hostinger Quick Deploy (Shared Hosting)
 
 1. Buat subdomain (opsional): `admin.your-domain.com`
-2. Pastikan document root mengarah ke folder `public`
+2. Pastikan document root mengarah ke folder `public`.
+    - Jika Hostinger mengharuskan pakai `public_html`, upload/copy **isi folder `public/`** ke `public_html/` (jangan ikut folder `public`-nya).
+    - Pastikan `public_html/index.php` ada dan mengarah ke project Laravel yang benar (biasanya otomatis kalau isi `public/` sudah dipindah).
 3. Set `.env` minimal: `APP_URL`, `ADMIN_KEY`, `DB_*`, dan `SESSION_DOMAIN` jika pakai subdomain
 4. Jalankan:
 
@@ -71,5 +73,14 @@ php artisan migrate --force
 php artisan db:seed
 php artisan config:cache
 ```
+
+### Penting: Asset Vite (`/build`) & Upload Gambar (`/storage`)
+
+-   **Vite build**: jalankan `npm run build` (biasanya di lokal/CI), lalu pastikan folder `public/build/` ikut ter-upload ke `public_html/build/`.
+-   **Upload gambar artikel** disimpan di `storage/app/public` dan diakses via URL `/storage/...`.
+    -   Jika ada SSH: jalankan `php artisan storage:link`.
+    -   Jika **tidak** ada symlink di shared hosting: copy folder `storage/app/public/` ke `public_html/storage/` setiap deploy (minimal folder `articles/`).
+
+Tips: pastikan permission folder writable untuk upload: `storage/`, `bootstrap/cache/`, dan target `public_html/storage/`.
 
 Catatan: kalau tidak ada SSH, jalankan langkah migration/seed lewat workflow deploy Hostinger (Git + composer) atau akses eksekusi perintah via panel yang tersedia.

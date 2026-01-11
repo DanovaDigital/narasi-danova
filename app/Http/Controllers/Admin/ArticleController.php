@@ -9,6 +9,7 @@ use App\Models\Article;
 use App\Models\Author;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
@@ -44,8 +45,19 @@ class ArticleController extends Controller
     {
         $data = $request->validated();
 
+        if ($request->hasFile('featured_image')) {
+            $data['featured_image'] = $request->file('featured_image')->store('articles', 'public');
+        }
+
         if (($data['status'] ?? 'draft') === 'published' && empty($data['published_at'])) {
             $data['published_at'] = now();
+        }
+
+        $data['is_published'] = ($data['status'] ?? 'draft') === 'published';
+
+        $adminId = auth('admin')->id();
+        if ($adminId) {
+            $data['admin_id'] = $adminId;
         }
 
         $article = Article::query()->create($data);
@@ -80,9 +92,25 @@ class ArticleController extends Controller
     {
         $data = $request->validated();
 
+        if ($request->boolean('remove_featured_image')) {
+            if (!empty($article->featured_image)) {
+                Storage::disk('public')->delete($article->featured_image);
+            }
+            $data['featured_image'] = null;
+        }
+
+        if ($request->hasFile('featured_image')) {
+            if (!empty($article->featured_image)) {
+                Storage::disk('public')->delete($article->featured_image);
+            }
+            $data['featured_image'] = $request->file('featured_image')->store('articles', 'public');
+        }
+
         if (($data['status'] ?? $article->status) === 'published' && empty($data['published_at'])) {
             $data['published_at'] = $article->published_at ?? now();
         }
+
+        $data['is_published'] = ($data['status'] ?? $article->status) === 'published';
 
         $article->update($data);
 

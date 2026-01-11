@@ -13,7 +13,7 @@
 
         <div class="bg-white rounded-xl shadow-soft border border-gray-200">
             <div class="p-6">
-                <form method="POST" action="{{ route('admin.articles.store') }}" class="space-y-6">
+                <form method="POST" action="{{ route('admin.articles.store') }}" enctype="multipart/form-data" class="space-y-6">
                     @csrf
 
                     <div>
@@ -56,6 +56,13 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1" for="excerpt">Excerpt</label>
                         <textarea id="excerpt" name="excerpt" rows="3" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500">{{ old('excerpt') }}</textarea>
                         @error('excerpt')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="featured_image">Featured Image</label>
+                        <input id="featured_image" type="file" name="featured_image" accept="image/*" class="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm file:mr-4 file:rounded-md file:border-0 file:bg-gray-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-gray-700 hover:file:bg-gray-200" />
+                        <p class="mt-1 text-xs text-gray-500">Disarankan landscape (mis. 1200×630). Max 4MB.</p>
+                        @error('featured_image')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                     </div>
 
                     <div>
