@@ -60,7 +60,9 @@ class SitemapController extends Controller
 
             Article::query()
                 ->published()
-                ->select(['slug', 'updated_at', 'featured_image_url'])
+                // select the real DB column `featured_image` so the Eloquent
+                // accessor `featured_image_url` can be used safely
+                ->select(['slug', 'updated_at', 'featured_image'])
                 ->orderByDesc('published_at')
                 ->chunk(200, function ($articles) use (&$urls, $toHttps) {
                     foreach ($articles as $article) {
